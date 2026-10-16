@@ -1,0 +1,28 @@
+{
+  "name": "lifelink-desktop",
+  "version": "1.0.0",
+  "description": "LifeLink — Community Blood and Essential Medicine Availability Network",
+  "main": "main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "server": "node server.js",
+    "electron": "electron .",
+    "start": "concurrently \"node server.js\" \"vite\""
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "lucide-react": "^0.475.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
+    "electron": "^34.2.0",
+    "vite": "^6.1.0"
+  }
+}
