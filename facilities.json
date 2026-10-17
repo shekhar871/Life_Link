@@ -1,0 +1,204 @@
+[
+  {
+    "id": 1,
+    "facilityName": "St. Jude Metropolitan Trauma Center",
+    "facilityType": "Level 1 Trauma Hospital",
+    "address": "450 Health Parkway, Metro City",
+    "contact": "+1 (555) 911-2001",
+    "status": "Operational",
+    "backendSecretApprovalCode": "SEC-STJUDE-9981-ADMIN",
+    "dispatchKeyHash": "sha256-stjude-critical-auth-key-8772",
+    "bloodStock": {
+      "Whole Blood": { "A+": 14, "A-": 4, "B+": 16, "B-": 2, "AB+": 6, "AB-": 1, "O+": 28, "O-": 4 },
+      "Packed RBCs": { "A+": 9, "A-": 2, "B+": 12, "B-": 1, "AB+": 3, "AB-": 0, "O+": 21, "O-": 2 },
+      "Platelets": { "A+": 6, "A-": 1, "B+": 8, "B-": 0, "AB+": 2, "AB-": 0, "O+": 10, "O-": 1 },
+      "Plasma": { "A+": 15, "A-": 3, "B+": 18, "B-": 2, "AB+": 9, "AB-": 2, "O+": 24, "O-": 5 }
+    },
+    "medicines": [
+      {
+        "id": "med-101",
+        "name": "Epinephrine 1mg/mL Auto-Injectors",
+        "batchNumber": "EPI-2026-440",
+        "quantity": 35,
+        "unit": "auto-injectors",
+        "category": "Resuscitation & Anaphylaxis",
+        "expiryDate": "2026-11-05",
+        "status": "Near Expiry"
+      },
+      {
+        "id": "med-102",
+        "name": "Tranexamic Acid (TXA) 1000mg/10mL",
+        "batchNumber": "TXA-2024-883",
+        "quantity": 12,
+        "unit": "vials",
+        "category": "Hemostatics / Trauma",
+        "expiryDate": "2026-10-18",
+        "status": "Expired"
+      },
+      {
+        "id": "med-103",
+        "name": "Norepinephrine 4mg/4mL",
+        "batchNumber": "NOR-2026-112",
+        "quantity": 50,
+        "unit": "ampoules",
+        "category": "Vasopressors & ICU",
+        "expiryDate": "2027-04-20",
+        "status": "Adequate"
+      },
+      {
+        "id": "med-104",
+        "name": "Ceftriaxone 1g IV/IM Vial",
+        "batchNumber": "CEF-2026-090",
+        "quantity": 18,
+        "unit": "vials",
+        "category": "Critical Antibiotics",
+        "expiryDate": "2026-11-12",
+        "status": "Near Expiry"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "facilityName": "Grace Memorial Blood Bank & Infusion Center",
+    "facilityType": "Regional Transfusion Facility",
+    "address": "120 Red Ribbon Avenue, District 4",
+    "contact": "+1 (555) 720-4499",
+    "status": "Operational",
+    "backendSecretApprovalCode": "SEC-GRACE-4421-ADMIN",
+    "dispatchKeyHash": "sha256-grace-dispatch-secure-9081",
+    "bloodStock": {
+      "Whole Blood": { "A+": 24, "A-": 8, "B+": 20, "B-": 5, "AB+": 10, "AB-": 3, "O+": 45, "O-": 8 },
+      "Packed RBCs": { "A+": 18, "A-": 6, "B+": 15, "B-": 3, "AB+": 7, "AB-": 2, "O+": 38, "O-": 6 },
+      "Platelets": { "A+": 12, "A-": 4, "B+": 11, "B-": 2, "AB+": 5, "AB-": 1, "O+": 18, "O-": 4 },
+      "Plasma": { "A+": 30, "A-": 10, "B+": 28, "B-": 6, "AB+": 14, "AB-": 4, "O+": 50, "O-": 10 }
+    },
+    "medicines": [
+      {
+        "id": "med-201",
+        "name": "Atropine Sulfate 0.5mg/5mL",
+        "batchNumber": "ATR-2026-781",
+        "quantity": 40,
+        "unit": "prefilled syringes",
+        "category": "Cardiac Resuscitation",
+        "expiryDate": "2027-08-30",
+        "status": "Adequate"
+      },
+      {
+        "id": "med-202",
+        "name": "Albumin 20% 50mL Infusion",
+        "batchNumber": "ALB-2026-302",
+        "quantity": 8,
+        "unit": "bottles",
+        "category": "Colloids & Plasma Expanders",
+        "expiryDate": "2026-11-02",
+        "status": "Near Expiry"
+      },
+      {
+        "id": "med-203",
+        "name": "Heparin Sodium 5000 IU/mL",
+        "batchNumber": "HEP-2025-019",
+        "quantity": 5,
+        "unit": "vials",
+        "category": "Anticoagulants",
+        "expiryDate": "2026-10-10",
+        "status": "Expired"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "facilityName": "Apex Regional Children's Hospital",
+    "facilityType": "Pediatric Critical Care",
+    "address": "88 Pediatric Way, North Sector",
+    "contact": "+1 (555) 303-8812",
+    "status": "Operational",
+    "backendSecretApprovalCode": "SEC-APEX-1182-ADMIN",
+    "dispatchKeyHash": "sha256-apex-pediatric-safety-2291",
+    "bloodStock": {
+      "Whole Blood": { "A+": 8, "A-": 3, "B+": 7, "B-": 2, "AB+": 3, "AB-": 1, "O+": 15, "O-": 5 },
+      "Packed RBCs": { "A+": 10, "A-": 4, "B+": 8, "B-": 2, "AB+": 4, "AB-": 1, "O+": 20, "O-": 6 },
+      "Platelets": { "A+": 7, "A-": 2, "B+": 6, "B-": 1, "AB+": 2, "AB-": 0, "O+": 12, "O-": 3 },
+      "Plasma": { "A+": 11, "A-": 3, "B+": 9, "B-": 2, "AB+": 4, "AB-": 1, "O+": 16, "O-": 4 }
+    },
+    "medicines": [
+      {
+        "id": "med-301",
+        "name": "Morphine Sulfate 5mg/mL Pediatric",
+        "batchNumber": "MOR-2026-809",
+        "quantity": 22,
+        "unit": "ampoules",
+        "category": "Analgesics & Sedation",
+        "expiryDate": "2027-02-14",
+        "status": "Adequate"
+      },
+      {
+        "id": "med-302",
+        "name": "Surfactant (Poractant Alfa) 120mg",
+        "batchNumber": "SUR-2026-211",
+        "quantity": 6,
+        "unit": "vials",
+        "category": "Neonatal Respiratory",
+        "expiryDate": "2026-11-20",
+        "status": "Near Expiry"
+      },
+      {
+        "id": "med-303",
+        "name": "Ondansetron 4mg/2mL",
+        "batchNumber": "OND-2026-667",
+        "quantity": 60,
+        "unit": "vials",
+        "category": "Antiemetics",
+        "expiryDate": "2027-11-10",
+        "status": "Adequate"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "facilityName": "Valley Life Community Health Center",
+    "facilityType": "Community Urgent Care",
+    "address": "772 Greenfield Road, West Valley",
+    "contact": "+1 (555) 880-1234",
+    "status": "Operational",
+    "backendSecretApprovalCode": "SEC-VALLEY-7711-ADMIN",
+    "dispatchKeyHash": "sha256-valley-urgent-dispatch-4432",
+    "bloodStock": {
+      "Whole Blood": { "A+": 6, "A-": 1, "B+": 5, "B-": 1, "AB+": 2, "AB-": 0, "O+": 12, "O-": 2 },
+      "Packed RBCs": { "A+": 5, "A-": 1, "B+": 4, "B-": 0, "AB+": 2, "AB-": 0, "O+": 10, "O-": 1 },
+      "Platelets": { "A+": 3, "A-": 0, "B+": 3, "B-": 0, "AB+": 1, "AB-": 0, "O+": 6, "O-": 1 },
+      "Plasma": { "A+": 8, "A-": 2, "B+": 7, "B-": 1, "AB+": 3, "AB-": 1, "O+": 14, "O-": 2 }
+    },
+    "medicines": [
+      {
+        "id": "med-401",
+        "name": "Regular Human Insulin 100 IU/mL",
+        "batchNumber": "INS-2026-990",
+        "quantity": 25,
+        "unit": "vials",
+        "category": "Endocrine & Glycemic Control",
+        "expiryDate": "2026-11-18",
+        "status": "Near Expiry"
+      },
+      {
+        "id": "med-402",
+        "name": "Naloxone (Narcan) 0.4mg/mL",
+        "batchNumber": "NAL-2026-004",
+        "quantity": 40,
+        "unit": "prefilled ampoules",
+        "category": "Opioid Overdose Antagonist",
+        "expiryDate": "2027-09-01",
+        "status": "Adequate"
+      },
+      {
+        "id": "med-403",
+        "name": "Amoxicillin-Clavulanate 1.2g",
+        "batchNumber": "AMC-2025-110",
+        "quantity": 10,
+        "unit": "vials",
+        "category": "Antibiotics",
+        "expiryDate": "2026-10-05",
+        "status": "Expired"
+      }
+    ]
+  }
+]

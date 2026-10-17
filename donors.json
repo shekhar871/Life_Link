@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "fullName": "Marcus Sterling",
+    "bloodGroup": "O-",
+    "eligibleComponents": ["Whole Blood", "Packed RBCs"],
+    "status": "Available",
+    "lastDonationDate": "2026-07-14",
+    "contact": "+1 (555) 234-9918",
+    "district": "Metro Center",
+    "isUniversalDonor": true,
+    "emergencyDispatchReady": true
+  },
+  {
+    "id": 2,
+    "fullName": "Elena Rostova",
+    "bloodGroup": "AB+",
+    "eligibleComponents": ["Plasma", "Platelets"],
+    "status": "Available",
+    "lastDonationDate": "2026-08-20",
+    "contact": "+1 (555) 781-3092",
+    "district": "District 4",
+    "isUniversalDonor": false,
+    "emergencyDispatchReady": true
+  },
+  {
+    "id": 3,
+    "fullName": "David Chen",
+    "bloodGroup": "B+",
+    "eligibleComponents": ["Whole Blood", "Platelets"],
+    "status": "Donating",
+    "lastDonationDate": "2026-10-23",
+    "contact": "+1 (555) 492-8810",
+    "district": "North Sector",
+    "isUniversalDonor": false,
+    "emergencyDispatchReady": false
+  },
+  {
+    "id": 4,
+    "fullName": "Amina Al-Mansoor",
+    "bloodGroup": "A-",
+    "eligibleComponents": ["Packed RBCs", "Whole Blood"],
+    "status": "Unavailable",
+    "lastDonationDate": "2026-09-30",
+    "contact": "+1 (555) 601-4471",
+    "district": "West Valley",
+    "isUniversalDonor": false,
+    "emergencyDispatchReady": false
+  }
+]
