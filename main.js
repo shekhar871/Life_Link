@@ -5,9 +5,28 @@ const fs = require('fs');
 console.log('Hello from Main');
 
 let mainWindow = null;
+let aboutWindow = null;
 
 function getInventoryPath() {
   return path.join(app.getPath('userData'), 'lifelink_inventory.json');
+}
+
+function createAboutWindow() {
+  if (aboutWindow && !aboutWindow.isDestroyed()) {
+    aboutWindow.focus();
+    return;
+  }
+  aboutWindow = new BrowserWindow({
+    width: 400,
+    height: 300,
+    title: 'About LifeLink',
+    resizable: false,
+    parent: mainWindow,
+    modal: true,
+    webPreferences: { contextIsolation: true, nodeIntegration: false }
+  });
+  aboutWindow.setMenu(null);
+  aboutWindow.loadFile(path.join(__dirname, 'about.html'));
 }
 
 function createMainWindow() {
@@ -28,6 +47,11 @@ function createMainWindow() {
     mainWindow.loadFile(path.join(__dirname, 'dist', 'index.html'));
   });
 }
+
+ipcMain.handle('open-about-window', async () => {
+  createAboutWindow();
+  return true;
+});
 
 ipcMain.handle('inventory:load', async () => {
   try {
