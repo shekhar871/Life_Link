@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -43,6 +43,28 @@ function createMainWindow() {
   });
 
   Menu.setApplicationMenu(null);
+
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    const isCtrlOrCmd = input.control || input.meta;
+    if (isCtrlOrCmd && input.key.toLowerCase() === 'c') {
+      event.preventDefault();
+      dialog.showMessageBox(mainWindow, {
+        type: 'warning',
+        title: 'Security Notice',
+        message: 'Copying sensitive donor or patient records is restricted.',
+        buttons: ['Understood']
+      });
+    } else if (isCtrlOrCmd && input.key.toLowerCase() === 'v') {
+      event.preventDefault();
+      dialog.showMessageBox(mainWindow, {
+        type: 'warning',
+        title: 'Security Notice',
+        message: 'Pasting untrusted medical data or credentials into LifeLink is restricted.',
+        buttons: ['Understood']
+      });
+    }
+  });
+
   mainWindow.loadURL('http://localhost:5173').catch(() => {
     mainWindow.loadFile(path.join(__dirname, 'dist', 'index.html'));
   });
