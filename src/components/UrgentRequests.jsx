@@ -1,3 +1,19 @@
+/**
+ * ============================================================================
+ * LIFELINK — URGENT CLINICAL REQUEST WORKFLOW (UrgentRequests.jsx)
+ * ============================================================================
+ * [LECTURE REQUIREMENTS IMPLEMENTED]:
+ * 1. Single Request Fetch with Prev/Next Pagination:
+ *    - Queries GET http://localhost:3000/requests/${id}
+ *    - Previous (id - 1) and Next (id + 1) navigation buttons
+ * 2. Role-Guarded Approval Workflow:
+ *    - Validates Staff/Admin permissions via POST /requests/:id/approve
+ *    - Updates status to 'Approved / Dispatching'
+ * 3. Emergency Dispatch Mode Transition:
+ *    - Launches the verified emergency dispatch and audit session
+ * ============================================================================
+ */
+
 import React, { useState, useEffect } from 'react';
 import {
   AlertTriangle,

@@ -1,3 +1,18 @@
+/**
+ * ============================================================================
+ * LIFELINK — ROLE-BASED ACCESS CONTROL MODAL (RoleGuardModal.jsx)
+ * ============================================================================
+ * [LECTURE REQUIREMENTS IMPLEMENTED]:
+ * 1. Role-Based Access Guard (RBAC):
+ *    - Community User: Public access, no credentials required
+ *    - Facility Staff: Authenticated with STAFF-MED-2026 passkey
+ *    - Administrator: Authenticated with ADMIN-SUPER-SECURE-99 passkey
+ * 2. Backend Security Validation:
+ *    - Verifies passkeys via POST http://localhost:3000/api/verify-role
+ *    - Enforces least privilege across privileged clinical endpoints
+ * ============================================================================
+ */
+
 import React, { useState } from 'react';
 import { ShieldCheck, Lock, X, AlertCircle, KeyRound, Check } from 'lucide-react';
 

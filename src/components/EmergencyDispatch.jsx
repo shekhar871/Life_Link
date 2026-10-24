@@ -1,3 +1,34 @@
+/**
+ * ============================================================================
+ * LIFELINK — EMERGENCY SLA DISPATCH & VERIFICATION (EmergencyDispatch.jsx)
+ * ============================================================================
+ * [LECTURE REQUIREMENTS IMPLEMENTED]:
+ * 1. Pre-Dispatch Readiness Gate 1 (Webcam):
+ *    - Hardware check: if (!navigator.mediaDevices)
+ *    - 1280x720 30FPS stream via navigator.mediaDevices.getUserMedia()
+ *    - Attached via videoRef.current.srcObject = stream (never src or createObjectURL)
+ *    - Disconnect listener: navigator.mediaDevices.ondevicechange
+ *    - Cleanup: stream.getTracks().forEach(t => t.stop()) on unmount / stop
+ * 2. Pre-Dispatch Readiness Gate 2 (Fullscreen):
+ *    - User gesture: document.documentElement.requestFullscreen()
+ *    - State synced with document 'fullscreenchange' listener
+ *    - Main process Kiosk Mode enforcement: win.setFullScreen(true), win.setKiosk(true)
+ * 3. Native Rules Dialog:
+ *    - window.lifelinkAPI.showRulesDialog()
+ *    - Strict guard: proceeds in React ONLY if result.response === 0 ("Start Dispatch")
+ * 4. Authoritative Emergency SLA Timer (Main → Renderer Push Stream):
+ *    - Duplicate-interval guard in Main process
+ *    - Main pushes remaining SLA seconds every 1s via webContents.send("timer", ...)
+ *    - Preload onTimerUpdate returns cleanup closure directly to useEffect
+ *    - Authoritative remaining time queried via window.lifelinkAPI.getTimeLeft()
+ * 5. Synchronized Camera + Screen Audit Pipeline:
+ *    - Single interval inside useEffect (with clearInterval cleanup)
+ *    - Single const timestamp = Date.now() generated per interval tick
+ *    - Passed to both savePhoto(arrayBuffer, timestamp) and takeScreenShot(timestamp)
+ *    - Output: matching photo-${timestamp}.jpg and screen-${timestamp}.png files
+ * ============================================================================
+ */
+
 import React, { useState, useEffect, useRef } from 'react';
 import {
   ShieldAlert,

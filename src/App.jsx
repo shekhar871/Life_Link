@@ -1,3 +1,15 @@
+/**
+ * ============================================================================
+ * LIFELINK — MAIN REACT RENDERER COMPONENT (App.jsx)
+ * ============================================================================
+ * [LECTURE ARCHITECTURE: Renderer Process (React 18 + Vite)]
+ * 
+ * Runs in the sandboxed renderer context at http://localhost:5173.
+ * Interacts with native OS and file system ONLY via window.lifelinkAPI exposed 
+ * in preload.js, and queries Express backend on http://localhost:3000 via fetch.
+ * ============================================================================
+ */
+
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import FacilityNavigator from './components/FacilityNavigator';
@@ -9,32 +21,41 @@ import AIAssistant from './components/AIAssistant/AIAssistant';
 import RoleGuardModal from './components/RoleGuardModal';
 import { HeartPulse, Loader2 } from 'lucide-react';
 
-// Lecture Slide Homework & Practice Challenge:
-// Log "Hello from Renderer" in App.jsx (for DevTools)
+// [LECTURE CHALLENGE: DevTools Debugging Log]
+// Confirms that the Renderer process has mounted in Chromium DevTools
 console.log('Hello from Renderer');
 
 export default function App() {
-  // Core Local Persistence State as specified in Section 2:
-  // Maintain an isLoading state (useState(true))
+  /**
+   * [LECTURE REQUIREMENT: Local Persistence isLoading State]
+   * Initialized to true to prevent flashing an empty list and to guard against
+   * the saving useEffect prematurely writing an empty array to disk on startup.
+   */
   const [isLoading, setIsLoading] = useState(true);
   const [inventory, setInventory] = useState([]);
 
-  // Navigation & Role states
+  // Navigation & Role authorization states
   const [activeTab, setActiveTab] = useState('facilities');
   const [userRole, setUserRole] = useState('User');
   const [roleKey, setRoleKey] = useState('');
   const [rolePermissions, setRolePermissions] = useState(['SEARCH', 'DONATE', 'REQUEST']);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
 
-  // Active emergency dispatch request
+  // Active emergency dispatch session state
   const [activeDispatchRequest, setActiveDispatchRequest] = useState(null);
 
-  // Theme Management
+  /**
+   * [LECTURE CONCEPT: Theme State & LocalStorage Persistence]
+   * Reads initial user theme from localStorage, defaulting to OS system theme.
+   */
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('lifelink_theme') || 'system';
   });
 
-  // Apply theme to document element and sync with Main process
+  /**
+   * [LECTURE CONCEPT: Theme Synchronization with Main Process]
+   * Syncs theme with document data-theme attribute and invokes Main IPC theme:set
+   */
   useEffect(() => {
     if (theme === 'system') {
       document.documentElement.removeAttribute('data-theme');
@@ -52,7 +73,11 @@ export default function App() {
     setTheme((prev) => (prev === 'system' ? 'light' : prev === 'light' ? 'dark' : 'system'));
   };
 
-  // 1. Local Persistence: Load saved data once on mount inside a useEffect
+  /**
+   * [LECTURE REQUIREMENT: Initial Data Loading Effect (Mounted Once)]
+   * Calls window.lifelinkAPI.loadInventory() over IPC to read userData JSON.
+   * Updates React state and finally sets isLoading(false).
+   */
   useEffect(() => {
     async function loadInitialData() {
       try {
@@ -94,7 +119,7 @@ export default function App() {
       } catch (err) {
         console.error('Failed to load local inventory via IPC:', err);
       } finally {
-        // Update the React state, and set isLoading(false)
+        // [LECTURE REQUIREMENT: Set isLoading(false) only after disk data returns]
         setIsLoading(false);
       }
     }
@@ -102,11 +127,15 @@ export default function App() {
     loadInitialData();
   }, []);
 
-  // 2. Saving useEffect with dependency array [inventory, isLoading]
-  // Starts with the guard: if (isLoading) return;
-  // preventing the initial empty React state from overwriting the saved JSON file on startup.
+  /**
+   * [LECTURE CRITICAL GUARD: Saving useEffect with Guard]
+   * Dependency array: [inventory, isLoading]
+   * Starts with: if (isLoading) return;
+   * This guard prevents the initial empty React state [] from overwriting 
+   * the persistent userData JSON file on application startup.
+   */
   useEffect(() => {
-    if (isLoading) return;
+    if (isLoading) return; // Prevent startup overwrite
 
     if (window.lifelinkAPI && window.lifelinkAPI.saveInventory) {
       window.lifelinkAPI.saveInventory(inventory).catch((err) => {
@@ -117,14 +146,14 @@ export default function App() {
     }
   }, [inventory, isLoading]);
 
-  // Open secondary about window via IPC
+  // Open secondary about window via IPC bridge
   const handleOpenAbout = async () => {
     if (window.lifelinkAPI && window.lifelinkAPI.openAboutWindow) {
       await window.lifelinkAPI.openAboutWindow();
     }
   };
 
-  // Exit application confirmation via IPC
+  // Exit application confirmation via IPC bridge
   const handleExitApp = async () => {
     if (window.lifelinkAPI && window.lifelinkAPI.exitApp) {
       await window.lifelinkAPI.exitApp();
@@ -142,7 +171,7 @@ export default function App() {
     setActiveTab('dispatch');
   };
 
-  // Calculate expired/near-expiry count for badges
+  // Calculate expired/near-expiry count (< 30 days) for navbar badge
   const expiryCount = inventory.filter((item) => {
     if (!item.expiryDate) return false;
     const expiry = new Date(item.expiryDate);
@@ -151,8 +180,10 @@ export default function App() {
     return diffDays <= 30;
   }).length;
 
-  // Render a safe intermediate loading UI ("Loading LifeLink records...") while isLoading is true
-  // so an empty list is not flashed before disk data returns.
+  /**
+   * [LECTURE REQUIREMENT: Safe Intermediate Loading UI]
+   * Rendered while isLoading is true so an empty list is never flashed before disk data returns.
+   */
   if (isLoading) {
     return (
       <div

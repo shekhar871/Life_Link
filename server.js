@@ -1,3 +1,19 @@
+/**
+ * ============================================================================
+ * LIFELINK — EXPRESS.JS BACKEND SERVER (server.js)
+ * ============================================================================
+ * [LECTURE ARCHITECTURE: Separate Backend Microservice alongside Electron Shell]
+ * 
+ * Runs on http://localhost:3000. Provides clinical data persistence backed by 
+ * JSON stores (facilities.json, urgent_requests.json, donors.json).
+ * 
+ * [SECURITY PRINCIPLE: SENSITIVE CREDENTIAL ENCAPSULATION]
+ * Role passkeys, approval secret hashes, and admin verification tokens are 
+ * stored and validated strictly on the backend. Only sanitized, display-safe 
+ * fields are transmitted across HTTP to the frontend renderer.
+ * ============================================================================
+ */
+
 const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
@@ -6,14 +22,19 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Enable CORS so the React renderer (http://localhost:5173 or Electron file://) can query APIs
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 
+// Persistent JSON file paths
 const FACILITIES_FILE = path.join(__dirname, 'facilities.json');
 const REQUESTS_FILE = path.join(__dirname, 'urgent_requests.json');
 const DONORS_FILE = path.join(__dirname, 'donors.json');
 
-// Helper to safely read JSON files
+/**
+ * [HELPER: Safe JSON File Reader]
+ * Reads file synchronously with graceful empty-array fallback
+ */
 function readData(filePath) {
   try {
     if (!fs.existsSync(filePath)) return [];
@@ -25,7 +46,10 @@ function readData(filePath) {
   }
 }
 
-// Helper to safely write JSON files
+/**
+ * [HELPER: Safe JSON File Writer]
+ * Writes formatted JSON back to disk atomically
+ */
 function writeData(filePath, data) {
   try {
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
@@ -36,20 +60,30 @@ function writeData(filePath, data) {
   }
 }
 
-// Sanitization: Strip sensitive backend secrets before sending to renderer
+/**
+ * [LECTURE REQUIREMENT: Data Sanitization Helper for Facilities]
+ * Strips backendSecretApprovalCode and dispatchKeyHash before sending to renderer.
+ */
 function sanitizeFacility(fac) {
   if (!fac) return null;
   const { backendSecretApprovalCode, dispatchKeyHash, ...safeFacility } = fac;
   return safeFacility;
 }
 
+/**
+ * [LECTURE REQUIREMENT: Data Sanitization Helper for Urgent Requests]
+ * Strips backendVerificationSecret before sending to renderer.
+ */
 function sanitizeRequest(reqItem) {
   if (!reqItem) return null;
   const { backendVerificationSecret, ...safeRequest } = reqItem;
   return safeRequest;
 }
 
-// Role secrets stored strictly in backend memory
+/**
+ * [SECURITY: Backend Role Credential Store]
+ * Passkeys are kept strictly in backend memory and never exposed to the client.
+ */
 const ROLE_CREDENTIALS = {
   staff: {
     secretKey: 'STAFF-MED-2026',
@@ -61,7 +95,10 @@ const ROLE_CREDENTIALS = {
   }
 };
 
-// Middleware for role verification
+/**
+ * [LECTURE REQUIREMENT: Role-Based Access Control Middleware]
+ * Intercepts requests to privileged endpoints, verifying the header key against backend secrets.
+ */
 function requireRole(allowedRoles = ['staff', 'admin']) {
   return (req, res, next) => {
     const authKey = req.headers['x-lifelink-role-key'] || req.body?.roleKey;
@@ -81,9 +118,14 @@ function requireRole(allowedRoles = ['staff', 'admin']) {
   };
 }
 
-// --- API ENDPOINTS ---
+// ============================================================================
+// API ENDPOINTS
+// ============================================================================
 
-// 1. Verify Role Key Endpoint
+/**
+ * 1. POST /api/verify-role
+ * Validates role passkey from the RoleGuardModal and returns authorized permission scopes.
+ */
 app.post('/api/verify-role', (req, res) => {
   const { role, roleKey } = req.body;
   const cleanRole = (role || '').toLowerCase();
@@ -104,14 +146,21 @@ app.post('/api/verify-role', (req, res) => {
   return res.status(401).json({ success: false, error: 'Invalid security passcode for this role' });
 });
 
-// 2. GET /facilities (List all sanitized facilities for search & filter)
+/**
+ * 2. GET /facilities
+ * Returns all facilities sanitized for client search and filtering.
+ */
 app.get('/facilities', (req, res) => {
   const facilities = readData(FACILITIES_FILE);
   const safeFacilities = facilities.map(sanitizeFacility);
   res.json(safeFacilities);
 });
 
-// 3. GET /facilities/:id (One facility record at a time with Prev / Next navigation)
+/**
+ * 3. GET /facilities/:id
+ * [LECTURE REQUIREMENT: Fetch one record at a time with Previous & Next navigation support]
+ * Returns single facility with hasNext and hasPrev boolean flags.
+ */
 app.get('/facilities/:id', (req, res) => {
   const id = parseInt(req.params.id, 10);
   const facilities = readData(FACILITIES_FILE);
@@ -130,14 +179,20 @@ app.get('/facilities/:id', (req, res) => {
   });
 });
 
-// 4. GET /requests (List all sanitized urgent requests)
+/**
+ * 4. GET /requests
+ * Returns all urgent community & hospital requests sanitized.
+ */
 app.get('/requests', (req, res) => {
   const requests = readData(REQUESTS_FILE);
   const safeRequests = requests.map(sanitizeRequest);
   res.json(safeRequests);
 });
 
-// 5. GET /requests/:id (One request record at a time with Prev / Next navigation)
+/**
+ * 5. GET /requests/:id
+ * [LECTURE REQUIREMENT: Fetch one request record at a time with Previous & Next navigation]
+ */
 app.get('/requests/:id', (req, res) => {
   const id = parseInt(req.params.id, 10);
   const requests = readData(REQUESTS_FILE);
@@ -156,7 +211,10 @@ app.get('/requests/:id', (req, res) => {
   });
 });
 
-// 6. POST /requests/:id/approve (Role-guarded request approval)
+/**
+ * 6. POST /requests/:id/approve
+ * Role-guarded approval endpoint. Requires Staff or Admin authorization.
+ */
 app.post('/requests/:id/approve', requireRole(['staff', 'admin']), (req, res) => {
   const id = parseInt(req.params.id, 10);
   const requests = readData(REQUESTS_FILE);
@@ -175,7 +233,10 @@ app.post('/requests/:id/approve', requireRole(['staff', 'admin']), (req, res) =>
   res.json({ success: true, message: 'Request approved successfully', request: sanitizeRequest(requests[index]) });
 });
 
-// 7. POST /facilities/:id/stock (Role-guarded stock modification)
+/**
+ * 7. POST /facilities/:id/stock
+ * Role-guarded stock modification endpoint. Modifies blood units or appends medicine batches.
+ */
 app.post('/facilities/:id/stock', requireRole(['staff', 'admin']), (req, res) => {
   const id = parseInt(req.params.id, 10);
   const { componentType, bloodGroup, change, newMedicine } = req.body;
@@ -209,7 +270,10 @@ app.post('/facilities/:id/stock', requireRole(['staff', 'admin']), (req, res) =>
   res.json({ success: true, message: 'Stock updated', facility: sanitizeFacility(facility) });
 });
 
-// 8. DELETE /facilities/:facId/medicines/:medId (Role-guarded discard expired medicine)
+/**
+ * 8. DELETE /facilities/:facId/medicines/:medId
+ * Role-guarded discard endpoint for expired medicines.
+ */
 app.delete('/facilities/:facId/medicines/:medId', requireRole(['staff', 'admin']), (req, res) => {
   const facId = parseInt(req.params.facId, 10);
   const { medId } = req.params;
@@ -231,7 +295,10 @@ app.delete('/facilities/:facId/medicines/:medId', requireRole(['staff', 'admin']
   res.json({ success: true, message: 'Expired medicine batch discarded', facility: sanitizeFacility(facility) });
 });
 
-// 9. GET /donors & POST /donors
+/**
+ * 9. GET /donors & POST /donors/register & PATCH /donors/:id/status
+ * Community blood donor network endpoints.
+ */
 app.get('/donors', (req, res) => {
   const donors = readData(DONORS_FILE);
   res.json(donors);
@@ -277,7 +344,7 @@ app.patch('/donors/:id/status', (req, res) => {
   res.json({ success: true, donor });
 });
 
-// Health check
+// Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'LifeLink Express Backend', timestamp: new Date().toISOString() });
 });

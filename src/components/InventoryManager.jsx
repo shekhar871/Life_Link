@@ -1,3 +1,21 @@
+/**
+ * ============================================================================
+ * LIFELINK — HOSPITAL LOCAL INVENTORY MANAGER (InventoryManager.jsx)
+ * ============================================================================
+ * [LECTURE REQUIREMENTS IMPLEMENTED]:
+ * 1. Local File Persistence via Secure IPC:
+ *    - Persisted into OS userData JSON file (survives application restarts)
+ *    - Guarded saving useEffect prevents startup state wipe
+ * 2. Expiry Horizon Tracking:
+ *    - Flags expired batches (days <= 0) and near-expiry batches (< 30 days)
+ * 3. Browser Notifications API Integration:
+ *    - Requests permission and triggers native OS Notification alerts for near-expiry items
+ * 4. Native OS Confirmation Dialog:
+ *    - Invokes window.lifelinkAPI.showDeleteMedicineDialog()
+ *    - Proceeds with record removal only if user clicks button 0 ("Delete")
+ * ============================================================================
+ */
+
 import React, { useState } from 'react';
 import {
   Package,

@@ -1,3 +1,35 @@
+/**
+ * ============================================================================
+ * LIFELINK — AI CLINICAL ASSISTANT (AIAssistant.jsx)
+ * ============================================================================
+ * [LECTURE REQUIREMENTS IMPLEMENTED]:
+ * 1. Single-Responsibility Modular UI Architecture:
+ *    - AppTitle: header with medical engine badge
+ *    - ConversationArea: auto-scrolling message list
+ *    - ChatBubble: styled user vs assistant message nodes
+ *    - InputBox: text input handling Enter key triggers
+ *    - SendButton: action button with loading spinner
+ *    - LoadingBox: conditional consultation indicator
+ *    - ErrorBox: conditional alert banner
+ * 2. Four Core States Managed:
+ *    - messages: Array<{ role: 'user' | 'assistant', content: string }>
+ *    - input: string
+ *    - isLoading: boolean
+ *    - error: string | null
+ * 3. Dual Triggers:
+ *    - Click Send button
+ *    - Press Enter key (with Shift+Enter multiline bypass)
+ * 4. sendMessage() Guard & Pipeline:
+ *    - Guard: if (!content || isLoading) return;
+ *    - Array copy: const updated = [...messages, { role: "user", content }]
+ *    - Clear input, clear error, set isLoading(true)
+ *    - Stateless Groq API fetch with full conversation history
+ *    - Load API key from .env using import.meta.env.VITE_GROQ_API_KEY
+ *    - Append assistant reply on success; set error on failure
+ *    - finally { setIsLoading(false); } block always executed
+ * ============================================================================
+ */
+
 import React, { useState } from 'react';
 import AppTitle from './AppTitle';
 import ConversationArea from './ConversationArea';

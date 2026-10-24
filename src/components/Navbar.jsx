@@ -1,3 +1,16 @@
+/**
+ * ============================================================================
+ * LIFELINK — DESKTOP NAVBAR & APPLICATION CONTROLS (Navbar.jsx)
+ * ============================================================================
+ * [LECTURE REQUIREMENTS IMPLEMENTED]:
+ * 1. Desktop Tab Navigation: Facilities, Local Inventory, Urgent Requests, Donors, Dispatch, AI
+ * 2. Role Switcher & Access Guard: Opens RoleGuardModal
+ * 3. Theme Toggle: Cycles Dark / Light / System theme and calls IPC theme:set
+ * 4. Secondary Window Action: Triggers window.lifelinkAPI.openAboutWindow()
+ * 5. Native Exit Action: Triggers native exit confirmation dialog
+ * ============================================================================
+ */
+
 import React from 'react';
 import {
   HeartPulse,

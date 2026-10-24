@@ -1,3 +1,23 @@
+/**
+ * ============================================================================
+ * LIFELINK — REGIONAL FACILITY SUPPLY NAVIGATOR (FacilityNavigator.jsx)
+ * ============================================================================
+ * [LECTURE REQUIREMENTS IMPLEMENTED]:
+ * 1. Single Record Fetch with Prev/Next Pagination:
+ *    - Calls GET http://localhost:3000/facilities/${id}
+ *    - Navigation buttons: Previous (id - 1) and Next (id + 1)
+ * 2. Blood Component Supply Matrix:
+ *    - Tracks 4 components: Whole Blood, Packed RBCs, Platelets, Plasma
+ *    - Across all 8 blood groups: A+, A-, B+, B-, AB+, AB-, O+, O-
+ * 3. Search & Filter Bar:
+ *    - Client-side filtering by facility name, address, or medicine
+ *    - Dropdown filters for blood group and component availability
+ * 4. Role-Guarded Actions:
+ *    - Stock increment/decrement (+ / -) requiring Staff or Admin role key
+ *    - Discard expired medicine button triggering native OS confirmation dialog
+ * ============================================================================
+ */
+
 import React, { useState, useEffect } from 'react';
 import {
   Building2,

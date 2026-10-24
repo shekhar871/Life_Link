@@ -1,3 +1,18 @@
+/**
+ * ============================================================================
+ * LIFELINK — COMMUNITY DONOR AVAILABILITY ROSTER (DonorRoster.jsx)
+ * ============================================================================
+ * [LECTURE REQUIREMENTS IMPLEMENTED]:
+ * 1. Community Donor Roster:
+ *    - Real-time availability tracking across 8 blood groups
+ *    - Component eligibility (Whole Blood, Packed RBCs, Platelets, Plasma)
+ *    - Universal donor identification badge (O-Negative)
+ * 2. Volunteer Registration & Status Toggling:
+ *    - POST /donors/register to register new community donors
+ *    - PATCH /donors/:id/status to toggle status: Available ↔ Donating ↔ Unavailable
+ * ============================================================================
+ */
+
 import React, { useState, useEffect } from 'react';
 import {
   Users,
